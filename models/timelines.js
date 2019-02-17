@@ -33,7 +33,7 @@ const Timeline = mongoose.model(
 
 function validateTimeline(timeline) {
   const schema = {
-    authorId: Joi.string().required(),
+    authorId: Joi.objectId().required(),
     timeStamp: Joi.string(),
     likes: Joi.array(),
     body: Joi.string().required()

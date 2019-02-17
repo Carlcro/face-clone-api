@@ -97,9 +97,9 @@ router.delete("/:id", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const timeline = await Timeline.findById(req.params.id)
-    .populate("author", "name -_id")
-    .populate("likes", "name -_id")
-    .populate("comments.userId", "name -_id");
+    .populate("author", "name")
+    .populate("likes", "name")
+    .populate("comments.userId", "name");
 
   if (!timeline)
     return res
