@@ -13,7 +13,7 @@ const commentSchema = new mongoose.Schema({
   content: {
     type: String,
     required: true,
-    maxlength: 255
+    maxlength: 1000
   }
 });
 
@@ -21,8 +21,7 @@ const Comment = mongoose.model("Comment", commentSchema);
 
 function validateComment(comment) {
   const schema = {
-    authorId: Joi.objectId().required(),
-    content: Joi.string().max(255)
+    content: Joi.string().max(1000)
   };
 
   return Joi.validate(comment, schema);
