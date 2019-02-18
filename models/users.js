@@ -3,7 +3,6 @@ const config = require("config");
 const mongoose = require("mongoose");
 const Joi = require("joi");
 
-
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -14,7 +13,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     unique: true,
     maxlength: 50,
-    minlength: 5
+    minlength: 5,
+    lowercase: true
   },
   password: {
     type: String,

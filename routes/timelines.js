@@ -5,11 +5,11 @@ const { Timeline, validate, validateLike } = require("../models/timelines");
 const { validateComment } = require("../models/comments");
 
 router.get("/", async (req, res) => {
-  const timeline = await Timeline.find().sort("timestamp");
+  const timeline = await Timeline.find().sort("-timestamp");
   res.send(timeline);
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", async (req, res) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
