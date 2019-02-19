@@ -9,7 +9,8 @@ router.get("/", async (req, res) => {
   const timeline = await Timeline.find()
     .sort("-timestamp")
     .populate("author", "name")
-    .populate("comments.userId", "name");
+    .populate("comments.userId", "name")
+    .populate("likes", "name");
 
   res.send(timeline);
 });
@@ -28,7 +29,7 @@ router.post("/", auth, async (req, res) => {
 });
 
 router.put("/like/:id", async (req, res) => {
-  const user = { _id: "5c6a8710734b5384700ad6cb" };
+  const user = { _id: "5c6b0c1224afb2f7ec3b94a9" };
   req.user = user;
   let timeline = {};
 
@@ -64,7 +65,7 @@ router.put("/comment/:id", async (req, res) => {
   const { error } = validateComment(req.body);
   if (error) return res.status(400).send(error.details[0].message);
 
-  const user = { _id: "5c6a8710734b5384700ad6cb" };
+  const user = { _id: "5c6b0c1224afb2f7ec3b94a9" };
 
   req.user = user;
 
@@ -81,7 +82,9 @@ router.put("/comment/:id", async (req, res) => {
     { new: true }
   )
     .populate("comments.userId", "name")
-    .populate("author", "name");
+    .populate("author", "name")
+    .populate("likes", "name");
+
   if (!timeline)
     return res
       .status(404)
