@@ -29,21 +29,28 @@ router.post("/", auth, async (req, res) => {
 
 router.put("/like/:id", async (req, res) => {
   const user = { _id: "5c6a8710734b5384700ad6cb" };
-
-  const currentTimeline = await Timeline.findById(req.params.id);
-
-  const likes = currentTimeline.likes;
-
-  const ny = likes.user._id;
-
   req.user = user;
-  const timeline = await Timeline.findByIdAndUpdate(
-    req.params.id,
-    { $push: { likes: req.user } },
-    { new: true }
-  )
-    .populate("comments.userId", "name")
-    .populate("author", "name");
+  let timeline = {};
+
+  if (req.body.liked) {
+    timeline = await Timeline.findByIdAndUpdate(
+      req.params.id,
+      { $addToSet: { likes: req.user._id } },
+      { new: true }
+    )
+      .populate("comments.userId", "name")
+      .populate("author", "name")
+      .populate("likes", "name");
+  } else {
+    timeline = await Timeline.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { likes: req.user._id } },
+      { new: true }
+    )
+      .populate("comments.userId", "name")
+      .populate("author", "name")
+      .populate("likes", "name");
+  }
 
   if (!timeline)
     return res
