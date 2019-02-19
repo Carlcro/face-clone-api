@@ -27,15 +27,23 @@ router.post("/", auth, async (req, res) => {
   res.send(timeline);
 });
 
-router.put("/like/:id", auth, async (req, res) => {
-  const { error } = validateLike(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+router.put("/like/:id", async (req, res) => {
+  const user = { _id: "5c6a8710734b5384700ad6cb" };
 
+  const currentTimeline = await Timeline.findById(req.params.id);
+
+  const likes = currentTimeline.likes;
+
+  const ny = likes.user._id;
+
+  req.user = user;
   const timeline = await Timeline.findByIdAndUpdate(
     req.params.id,
     { $push: { likes: req.user } },
     { new: true }
-  );
+  )
+    .populate("comments.userId", "name")
+    .populate("author", "name");
 
   if (!timeline)
     return res
@@ -64,8 +72,9 @@ router.put("/comment/:id", async (req, res) => {
       }
     },
     { new: true }
-  ).populate("comments.userId", "name");
-
+  )
+    .populate("comments.userId", "name")
+    .populate("author", "name");
   if (!timeline)
     return res
       .status(404)
