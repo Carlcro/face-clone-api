@@ -6,7 +6,7 @@ module.exports = function auth(req, res, next) {
   if (!token) return res.status(401).send("Acess denied. No token");
 
   try {
-    const decoded = jwt.verify(token, config.get("face_clone_jwtPrivateKey"));
+    const decoded = jwt.verify(token, config.get("jwtPrivateKey"));
     req.user = decoded;
     next();
   } catch (error) {
