@@ -28,9 +28,7 @@ router.post("/", auth, async (req, res) => {
   res.send(timeline);
 });
 
-router.put("/like/:id", async (req, res) => {
-  const user = { _id: "5c6b0c1224afb2f7ec3b94a9" };
-  req.user = user;
+router.put("/like/:id", auth, async (req, res) => {
   let timeline = {};
 
   if (req.body.liked) {
@@ -61,13 +59,9 @@ router.put("/like/:id", async (req, res) => {
   res.send(timeline);
 });
 
-router.put("/comment/:id", async (req, res) => {
+router.put("/comment/:id", auth, async (req, res) => {
   const { error } = validateComment(req.body);
   if (error) return res.status(400).send(error.details[0].message);
-
-  const user = { _id: "5c6b0c1224afb2f7ec3b94a9" };
-
-  req.user = user;
 
   const timeline = await Timeline.findByIdAndUpdate(
     req.params.id,
