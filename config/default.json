@@ -1,3 +1,4 @@
 {
-  "jwtPrivateKey": "face_clone_jwtPrivateKey"
+  "jwtPrivateKey": "",
+  "db": "mongodb://localhost/faceclone-api"
 }
