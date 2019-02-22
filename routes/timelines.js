@@ -25,7 +25,13 @@ router.post("/", auth, async (req, res) => {
   });
   timeline = await timeline.save();
 
-  res.send(timeline);
+  const savedTimeline = await Timeline.findById(timeline._id)
+    .sort("-timestamp")
+    .populate("author", "name")
+    .populate("comments.userId", "name")
+    .populate("likes", "name");
+
+  res.send(savedTimeline);
 });
 
 router.put("/like/:id", auth, async (req, res) => {
